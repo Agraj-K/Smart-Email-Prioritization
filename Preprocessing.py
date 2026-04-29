@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import nltk
-from nltk.tokenize import word_tokenize
+from transformers import BartTokenizer, DistilBertTokenizer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from email import message_from_string
@@ -28,6 +28,8 @@ class Preprocessing:
             self.df = self.df.head(sample_size)
  
         self._cleaner = Cleaner()
+        self.bart_tokenizer = BartTokenizer.from_pretrained("facebook/bart-base")
+        self.distil_tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-uncased")
 
     def parse_email_message(self,message):
         try:
@@ -90,20 +92,33 @@ class Preprocessing:
         print(f"[Cleaning] Dropped {before - len(self.df)} unusable rows.")
 
     def tokenization(self):
-        stop_words = set(stopwords.words('english'))
- 
-        def _tokenize(text):
+        def encode_bart(text):
             if not isinstance(text, str) or not text.strip():
-                return []
-            tokens = word_tokenize(text)
-            return [t for t in tokens if t not in stop_words]
- 
-        self.df["tokens"] = self.df["clean_body_classify"].apply(_tokenize)
- 
-        # Report any rows that tokenized to nothing (edge cases)
-        empty_tokens = (self.df["tokens"].apply(len) == 0).sum()
-        if empty_tokens:
-            print(f"[Tokenization] Warning: {empty_tokens} rows produced 0 tokens.")
+                return None
+            return self.bart_tokenizer(
+                text,
+                padding="max_length",
+                truncation=True,
+                max_length=256,
+                return_tensors="pt"
+            )
+
+        def encode_distilbert(text):
+            if not isinstance(text, str) or not text.strip():
+                return None
+            return self.distil_tokenizer(
+                text,
+                padding="max_length",
+                truncation=True,
+                max_length=256,
+                return_tensors="pt"
+            )
+
+    # Apply tokenization
+        self.df["bart_inputs"] = self.df["clean_body_summary"].apply(encode_bart)
+        self.df["distilbert_inputs"] = self.df["clean_body_classify"].apply(encode_distilbert)
+
+        print("[Tokenization] Completed using transformer tokenizers.")
 
     def lemmatization(self):
         lemmatizer = WordNetLemmatizer()
