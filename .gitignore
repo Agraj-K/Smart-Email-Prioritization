@@ -1,4 +1,17 @@
 venv/
 __pycache__/
 *.pyc
+
+# model outputs
+*.pkl
+*.csv
+
+# huggingface cache
+.cache/
+hf_cache/
+
+# vscode
+.vscode/
+
+# env files
 .env

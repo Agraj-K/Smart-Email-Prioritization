@@ -1,183 +1,197 @@
 import pandas as pd
+import torch
+import numpy as np
 import re
-from nltk.sentiment import SentimentIntensityAnalyzer
 import nltk
-from Preprocessing import Preprocessing
 
-nltk.download('vader_lexicon', quiet=True)
+from transformers import AutoTokenizer, AutoModel
+from nltk.sentiment import SentimentIntensityAnalyzer
+
+nltk.download("vader_lexicon", quiet=True)
 
 
 class FeatureExtractor:
     def __init__(self, df):
         self.df = df
+
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        print(f"[Stage 3] Loading BERT on {self.device}...")
+
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            "distilbert-base-uncased"
+        )
+
+        self.model = AutoModel.from_pretrained(
+            "distilbert-base-uncased"
+        ).to(self.device)
+
+        self.model.eval()
+
         self.sia = SentimentIntensityAnalyzer()
 
         self.urgency_words = [
-            "urgent", "asap", "immediately", "deadline",
-            "today", "tomorrow", "important", "priority",
-            "submit", "meeting", "action required",
-            "time sensitive", "by eod", "by end of day",
-            "overdue", "past due", "please respond"
+            "urgent",
+            "asap",
+            "deadline",
+            "important",
+            "tomorrow",
+            "today",
+            "immediately"
         ]
 
+        self.action_phrases = [
+            "can you",
+            "please send",
+            "need you",
+            "please review",
+            "submit",
+            "approve",
+            "respond",
+            "schedule",
+            "meeting"
+        ]
 
+    # -------------------------
+    # BERT Embeddings
+    # -------------------------
+    @torch.no_grad()
+    def get_bert_embedding(self, text):
+        if not isinstance(text, str) or not text.strip():
+            return np.zeros(768)
+
+        inputs = self.tokenizer(
+            text,
+            truncation=True,
+            padding=True,
+            max_length=512,
+            return_tensors="pt"
+        ).to(self.device)
+
+        outputs = self.model(**inputs)
+
+        embedding = outputs.last_hidden_state[:, 0, :]
+        return embedding.cpu().numpy().flatten()
+
+    # -------------------------
+    # Urgency Score
+    # -------------------------
     def urgency_score(self, text):
         if not isinstance(text, str):
             return 0
-        count = 0
+
         text = text.lower()
+        score = 0
+
         for word in self.urgency_words:
-            if word in text:
-                count += 1
-        return count
+            if re.search(rf"\b{word}\b", text):
+                score += 1
 
+        return score
 
+    # -------------------------
+    # Action Request Score
+    # -------------------------
+    def action_score(self, text):
+        if not isinstance(text, str):
+            return 0
+
+        text = text.lower()
+        score = 0
+
+        for phrase in self.action_phrases:
+            if phrase in text:
+                score += 1
+
+        return score
+
+    # -------------------------
+    # Sentiment Score
+    # -------------------------
     def sentiment_score(self, text):
         if not isinstance(text, str):
             return 0
-        scores = self.sia.polarity_scores(text)
-        return scores['compound']
 
+        return self.sia.polarity_scores(text)["compound"]
 
-    def subject_score(self, subject):
-        important_words = [
-            "meeting", "project", "deadline", "submission",
-            "interview", "exam", "urgent", "action required",
-            "important", "asap", "review", "approval"
-        ]
-        if not isinstance(subject, str):
-            return 0
-        score = 0
-        subject = subject.lower()
-        for word in important_words:
-            if word in subject:
-                score += 1
-        return score
-
-
+    # -------------------------
+    # Sender Score
+    # -------------------------
     def sender_score(self, sender):
         if not isinstance(sender, str):
             return 0
+
         sender = sender.lower()
-        # Spam / automated senders — lowest priority
-        if any(x in sender for x in ["noreply", "no-reply", "newsletter",
-                                      "unsubscribe", "donotreply", "mailer"]):
-            return 0
-        # High-importance senders
-        if any(x in sender for x in ["manager", "director", "ceo", "cto",
-                                      "professor", "faculty", ".edu", "admin"]):
+
+        if ".edu" in sender:
             return 3
-        # Default real person
-        return 2
+        elif "ceo" in sender:
+            return 4
+        elif "manager" in sender:
+            return 3
+        elif "noreply" in sender:
+            return 0
+        else:
+            return 2
 
-
+    # -------------------------
+    # Thread Score
+    # -------------------------
     def thread_score(self, subject):
         if not isinstance(subject, str):
             return 0
+
         subject = subject.lower()
-        # Re: and Fwd: mean the original action was already taken
-        # penalise slightly so fresh emails rank higher
-        if "re:" in subject or "fwd:" in subject or "fw:" in subject:
-            return -1
-        return 0
+        score = 0
 
-    def time_score(self, date_string):
-        if not isinstance(date_string, str):
-            return 0
-        try:
-            email_time = pd.to_datetime(date_string, utc=True)
-            hour = email_time.hour
-            if 9 <= hour <= 18:   # work hours → more important
-                return 2
-            else:
-                return 1
-        except Exception:
-            return 0
+        if "re:" in subject:
+            score += 1
 
-    def priority_label(self, row):
-        score = (
-            row["urgency_score"] * 3 +    # strongest signal
-            row["subject_score"] * 2 +    # subject keywords matter a lot
-            row["sender_score"]  * 2 +    # who sent it matters
-            row["sentiment_score"] * 1 +  # -1 to 1, softer influence
-            row["time_score"]    * 1 +    # work hours boost
-            row["thread_score"]  * 1      # penalises replies/fwds slightly
-        )
-        if score >= 8:
-            return "High"
-        elif score >= 4:
-            return "Medium"
-        else:
-            return "Low"
+        if "fwd:" in subject:
+            score += 1
 
+        return score
+
+    # -------------------------
+    # Extract Features
+    # -------------------------
     def extract_features(self):
+        print("[Stage 3] Extracting contextual features...")
+
         self.df["urgency_score"] = self.df["clean_body_classify"].apply(
             self.urgency_score
         )
+
+        self.df["action_score"] = self.df["clean_body_classify"].apply(
+            self.action_score
+        )
+
         self.df["sentiment_score"] = self.df["clean_body_classify"].apply(
             self.sentiment_score
         )
-        self.df["subject_score"] = self.df["subject"].apply(
-            self.subject_score
-        )
+
         self.df["sender_score"] = self.df["from"].apply(
             self.sender_score
         )
+
         self.df["thread_score"] = self.df["subject"].apply(
             self.thread_score
         )
-        self.df["time_score"] = self.df["date"].apply(
-            self.time_score
+
+        print("[Stage 3] Extracting BERT embeddings...")
+
+        embeddings = []
+
+        for text in self.df["clean_body_classify"]:
+            embeddings.append(self.get_bert_embedding(text))
+
+        embedding_df = pd.DataFrame(
+            embeddings,
+            columns=[f"bert_{i}" for i in range(768)]
         )
-        # Final priority label — must come after all score columns are set
-        self.df["priority"] = self.df.apply(self.priority_label, axis=1)
+
+        self.df = pd.concat(
+            [self.df.reset_index(drop=True), embedding_df],
+            axis=1
+        )
+
         return self.df
-
-    def show_features(self, n=5):
-        print(
-            self.df[
-                [
-                    "subject",
-                    "urgency_score",
-                    "sentiment_score",
-                    "subject_score",
-                    "sender_score",
-                    "thread_score",
-                    "time_score",
-                    "priority"
-                ]
-            ].head(n)
-        )
-
-    def show_priority_distribution(self):
-        counts = self.df["priority"].value_counts()
-        total  = len(self.df)
-        print("\n── Priority Distribution ──")
-        for label in ["High", "Medium", "Low"]:
-            count = counts.get(label, 0)
-            bar   = "█" * int(count / total * 30)
-            print(f"  {label:<8} {count:>5}  {bar}")
-        print()
-
-
-if __name__ == "__main__":
-    p = Preprocessing(sample_size=1000)
-
-    print("Parsing emails...")
-    p.apply_parse()
-
-    print("Cleaning emails...")
-    p.apply_cleaning()
-
-    print("Tokenizing...")
-    p.tokenization()
-
-    print("Lemmatizing...")
-    p.lemmatization()
-
-    print("Extracting features...")
-    fe = FeatureExtractor(p.df)
-    final_df = fe.extract_features()
-
-    fe.show_features()
-    fe.show_priority_distribution()
