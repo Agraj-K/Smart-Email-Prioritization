@@ -1,0 +1,25 @@
+# Core
+torch>=2.0
+transformers>=4.30
+tokenizers
+sentencepiece
+
+# Data
+pandas
+numpy
+kagglehub
+
+# NLP
+nltk
+
+# Vector Store
+faiss-cpu
+
+# ML Evaluation
+scikit-learn
+
+# UI
+streamlit
+
+# Progress bars
+tqdm
