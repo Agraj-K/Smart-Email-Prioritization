@@ -11,6 +11,9 @@ kagglehub
 
 # NLP
 nltk
+datasets
+peft
+evaluate
 
 # Vector Store
 faiss-cpu

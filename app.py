@@ -72,6 +72,11 @@ def load_gmail_service():
     from inference.gmail_service import GmailService
     return GmailService()
 
+@st.cache_resource(show_spinner="Loading Summarizer...")
+def load_summarization_service():
+    from inference.summarization_service import SummarizationService
+    return SummarizationService()
+
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
@@ -97,7 +102,7 @@ with st.sidebar:
 
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
-tab1, tab2 = st.tabs(["✍️ Manual Input", "📥 Live Gmail Inbox"])
+tab1, tab2, tab3 = st.tabs(["✍️ Manual Prioritization", "📥 Live Gmail Inbox", "📝 Summarization"])
 
 with tab1:
     # ── Main Input ────────────────────────────────────────────────────────────────
@@ -204,3 +209,21 @@ with tab2:
                     st.write(email['body'])
                 
                 st.divider()
+
+with tab3:
+    st.header("Email Summarization")
+    st.write("Generate a concise subject line or summary for an email body using the fine-tuned model.")
+    
+    sum_text = st.text_area("Paste email body to summarize:", height=200)
+    
+    if st.button("📝 Generate Summary", type="primary"):
+        if sum_text.strip():
+            summarizer = load_summarization_service()
+            with st.spinner("Summarizing..."):
+                summary = summarizer.summarize(sum_text)
+            
+            st.success("Summary Generated!")
+            st.markdown(f"**Subject/Summary:** {summary}")
+        else:
+            st.warning("Please enter some text to summarize.")
+
