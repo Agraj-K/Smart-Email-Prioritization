@@ -15,6 +15,9 @@ FAISS_DIR = os.path.join(DATA_DIR, "faiss_index")
 PROCESSED_CSV = os.path.join(DATA_DIR, "processed_emails.csv")
 LABELED_CSV = os.path.join(DATA_DIR, "labeled_emails.csv")
 
+GMAIL_CREDENTIALS_FILE = os.path.join(PROJECT_ROOT, "credentials.json")
+GMAIL_TOKEN_FILE = os.path.join(PROJECT_ROOT, "token.json")
+
 # Ensure directories exist
 for _dir in [DATA_DIR, MODEL_DIR, FAISS_DIR]:
     os.makedirs(_dir, exist_ok=True)
