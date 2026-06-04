@@ -27,6 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.settings import (
     CLASSIFIER_MODEL_NAME, NUM_LABELS, LABEL2ID, ID2LABEL,
+    PRIORITY_LABELS,
     TRAIN_BATCH_SIZE, EVAL_BATCH_SIZE, LEARNING_RATE,
     NUM_EPOCHS, WEIGHT_DECAY, WARMUP_RATIO, TRAIN_SPLIT,
     EARLY_STOPPING_PATIENCE, RANDOM_SEED, MODEL_DIR,
@@ -87,7 +88,7 @@ class FineTuner:
 
     def train(self, texts: list[str], labels: list[str]) -> dict:
         """
-        Fine-tune the model.
+        Fine-tune the model with class weights to handle imbalance.
 
         Args:
             texts:  List of cleaned email bodies.
@@ -96,6 +97,24 @@ class FineTuner:
         Returns:
             Dictionary with training history (loss, accuracy per epoch).
         """
+        # Calculate class weights to handle imbalance
+        from collections import Counter
+        label_counts = Counter(labels)
+        total_samples = len(labels)
+        
+        class_weights = []
+        for label in PRIORITY_LABELS:
+            count = label_counts.get(label, 0)
+            if count > 0:
+                weight = total_samples / (NUM_LABELS * count)
+            else:
+                weight = 1.0
+            class_weights.append(weight)
+        
+        self.class_weights = torch.tensor(class_weights, dtype=torch.float).to(self.device)
+        print(f"[FineTuner] Label frequencies: {dict(label_counts)}")
+        print(f"[FineTuner] Calculated class weights: {dict(zip(PRIORITY_LABELS, class_weights))}")
+
         train_loader, val_loader = self._build_dataloaders(texts, labels)
 
         # Optimizer & scheduler
@@ -117,6 +136,8 @@ class FineTuner:
         patience_counter = 0
         history = {"train_loss": [], "val_loss": [], "val_accuracy": []}
 
+        loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights)
+
         print(f"\n[FineTuner] Starting training for {NUM_EPOCHS} epochs...")
         for epoch in range(1, NUM_EPOCHS + 1):
             # ── Train ─────────────────────────────────────────────────────
@@ -127,8 +148,12 @@ class FineTuner:
             for batch in pbar:
                 batch = {k: v.to(self.device) for k, v in batch.items()}
 
-                outputs = self.model(**batch)
-                loss = outputs.loss
+                outputs = self.model(
+                    input_ids=batch["input_ids"],
+                    attention_mask=batch["attention_mask"]
+                )
+                logits = outputs.logits
+                loss = loss_fct(logits, batch["labels"])
 
                 optimizer.zero_grad()
                 loss.backward()
@@ -183,12 +208,23 @@ class FineTuner:
         total_loss = 0
         all_preds, all_labels = [], []
 
+        # Check if class weights are defined to weight the evaluation loss
+        if hasattr(self, "class_weights") and self.class_weights is not None:
+            loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights)
+        else:
+            loss_fct = torch.nn.CrossEntropyLoss()
+
         for batch in dataloader:
             batch = {k: v.to(self.device) for k, v in batch.items()}
-            outputs = self.model(**batch)
-            total_loss += outputs.loss.item()
+            outputs = self.model(
+                input_ids=batch["input_ids"],
+                attention_mask=batch["attention_mask"]
+            )
+            logits = outputs.logits
+            loss = loss_fct(logits, batch["labels"])
+            total_loss += loss.item()
 
-            preds = torch.argmax(outputs.logits, dim=-1)
+            preds = torch.argmax(logits, dim=-1)
             all_preds.extend(preds.cpu().numpy())
             all_labels.extend(batch["labels"].cpu().numpy())
 

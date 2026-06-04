@@ -74,16 +74,15 @@ class LabelGenerator:
         return 2
 
     def thread_score(self, subject: str) -> int:
-        """Score based on reply/forward depth (re:, fwd:)."""
+        """Score based on reply/forward depth (re:, fwd:), capped at 2 to prevent inflation."""
         if not isinstance(subject, str):
             return 0
         subject = subject.lower()
-        score = 0
-        if "re:" in subject:
-            score += 1
-        if "fwd:" in subject:
-            score += 1
-        return score
+        # Count occurrences of re: and fwd: to measure thread depth
+        re_count = subject.count("re:")
+        fwd_count = subject.count("fwd:")
+        depth = re_count + fwd_count
+        return min(2, depth)
 
     # ── Composite Label Assignment ────────────────────────────────────────────
 
