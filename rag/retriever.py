@@ -35,6 +35,10 @@ class Retriever:
         """
         Embed a query email and retrieve the top-k most similar historical emails.
 
+        Over-fetches from the index and deduplicates on the fly so that
+        duplicate copies of the same email (common in the Enron corpus)
+        do not consume multiple result slots.
+
         Args:
             email_text: Raw or cleaned email text.
             top_k:      Number of results.
@@ -44,5 +48,19 @@ class Retriever:
               - subject, body_snippet, priority_label, similarity_score
         """
         query_embedding = self.embedder.embed_text(email_text)
-        results = self.store.search(query_embedding, top_k=top_k)
-        return results
+
+        # Over-fetch to account for duplicates in the index
+        raw_results = self.store.search(query_embedding, top_k=top_k * 4)
+
+        # Deduplicate by body snippet content
+        seen = set()
+        unique_results = []
+        for res in raw_results:
+            snippet = res.get("body_snippet", "").strip()
+            if snippet not in seen:
+                seen.add(snippet)
+                unique_results.append(res)
+            if len(unique_results) == top_k:
+                break
+
+        return unique_results

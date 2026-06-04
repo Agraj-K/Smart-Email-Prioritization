@@ -1,0 +1,134 @@
+@startuml Smart_Email_Prioritization_Pipeline
+
+' ==========================================
+'  STYLING — A4 Print-Friendly
+' ==========================================
+skinparam dpi 150
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 14
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam nodesep 35
+skinparam ranksep 45
+skinparam padding 12
+
+skinparam package {
+  BackgroundColor #F0F0F0
+  BorderColor #222222
+  FontColor #000000
+  FontSize 17
+  FontStyle bold
+  BorderThickness 2
+}
+
+skinparam rectangle {
+  BackgroundColor #FFFFFF
+  BorderColor #444444
+  FontColor #111111
+  RoundCorner 6
+}
+
+skinparam arrow {
+  Color #333333
+  FontColor #555555
+  FontSize 12
+  Thickness 2
+}
+
+' ==================================================================
+'   PHASE 1 — MODEL FINE-TUNING
+' ==================================================================
+package "Phase 1 — Model Fine-Tuning" as P1 {
+
+  rectangle "Raw Email Data\n//(Training / Validation Set)//" as FT1
+  rectangle "Data\nPreprocessing" as FT2
+  rectangle "Pre-trained LM\n//(BERT / DistilBERT)//" as FT3
+  rectangle "Labeled Priority\nDataset" as FT_LBL
+  rectangle "Supervised\nFine-Tuning\n//(Loss Function +\nOptimization)//" as FT4
+  rectangle "**Fine-Tuned Model**\n//(with weights)//" as FT5 #D9E6F2
+
+  FT1 -right-> FT2
+  FT2 -right-> FT3
+  FT3 -right-> FT4
+  FT_LBL -down-> FT4
+  FT4 -right-> FT5
+}
+
+' ==================================================================
+'   PHASE 2 — RETRIEVAL-AUGMENTED GENERATION (RAG)
+' ==================================================================
+package "Phase 2 — RAG Pipeline\n(Retrieval-Augmented Generation)" as P2 {
+
+  rectangle "Historical\nEmail Archives" as RAG1
+  rectangle "Chunking &\nEmbedding\n//(BERT-based Embedder)//" as RAG2
+  rectangle "Vector Database\n//(FAISS / Metadata)//" as RAG3
+  rectangle "Semantic\nSearch" as RAG4
+
+  rectangle "New Email" as RAG6
+  rectangle "Query\nEmbedding" as RAG5
+
+  RAG1 -right-> RAG2
+  RAG2 -right-> RAG3 : "  Email Embeddings +\n  Metadata  "
+  RAG3 -right-> RAG4 : "  Relevant Historical\n  Context  "
+
+  RAG6 -right-> RAG5
+  RAG5 -up-> RAG4
+
+  RAG3 -[hidden]down- RAG6
+}
+
+' ==================================================================
+'   PHASE 3 — CONTEXTUAL INFERENCE
+' ==================================================================
+package "Phase 3 — Contextual Inference" as P3 {
+
+  rectangle "New Email Text\n//(e.g. 'URGENT: Project Deadline')//" as CI1
+  rectangle "Retrieved Historical\nContext from RAG\n//(similar past emails/threads)//" as CI2
+  rectangle "Contextual\nInput" as CI3
+  rectangle "**Generative LLM**\n//(Fine-Tuned\nModel + Prompt)//" as CI4 #D9E6F2
+  rectangle "**Final Classification:**\n**HIGH PRIORITY +**\n**Confidence Score**" as CI5 #D4EDDA
+
+  CI1 -down-> CI3
+  CI2 -down-> CI3
+  CI3 -right-> CI4
+  CI4 -right-> CI5
+}
+
+' ==================================================================
+'   PHASE 4 — SUMMARIZATION & LIVE UI
+' ==================================================================
+package "Phase 4 — Summarization & Live UI" as P4 {
+
+  rectangle "Gmail API\n//(OAuth2)//" as UI1
+  rectangle "Live Incoming\nEmail" as UI2
+  rectangle "**SUMMARIZation SERVICE**\n//(Flan-T5 Base)//" as UI3 #D9E6F2
+  rectangle "LoRA\nAdapter Weights" as UI_LORA
+  rectangle "Generated\nEmail Summary" as UI4 #D4EDDA
+  rectangle "Pipeline\nOrchestrator" as UI5
+  rectangle "Streamlit\nWeb UI" as UI6
+
+  UI1 -down-> UI2
+  UI2 -down-> UI3
+  UI_LORA -left-> UI3
+  UI3 -down-> UI4
+  UI4 -down-> UI5
+  UI4 -down-> UI6
+}
+
+' ==================================================================
+'   INTER-PHASE DATA FLOW (dotted arrows)
+' ==================================================================
+FT5  ..>  CI4   : "  Trained Model Weights  "
+RAG4 ..>  CI2   : "  Retrieved Context  "
+FT5  ..>  UI3   : "  LoRA Adapter / Weights  "
+CI5  ..>  UI5   : "  Priority + Score  "
+
+' ==================================================================
+'   LAYOUT — Vertical phase stacking
+' ==================================================================
+P1 -[hidden]down- P2
+P2 -[hidden]down- P3
+P3 -[hidden]down- P4
+
+@enduml

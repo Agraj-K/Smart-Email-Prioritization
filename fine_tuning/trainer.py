@@ -102,11 +102,13 @@ class FineTuner:
         label_counts = Counter(labels)
         total_samples = len(labels)
         
+        import math
         class_weights = []
         for label in PRIORITY_LABELS:
             count = label_counts.get(label, 0)
             if count > 0:
-                weight = total_samples / (NUM_LABELS * count)
+                # Use square root to smooth/dampen extreme weights
+                weight = math.sqrt(total_samples / (NUM_LABELS * count))
             else:
                 weight = 1.0
             class_weights.append(weight)

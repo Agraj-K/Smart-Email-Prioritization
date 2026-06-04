@@ -14,12 +14,41 @@ class Cleaner:
 
     # ── Reply / Forward Removal ───────────────────────────────────────────────
     def remove_replies(self, text: str) -> str:
-        """Strip quoted reply blocks and forwarded-message headers."""
+        """Strip quoted reply blocks, forwarded-message headers, and
+        Enron-specific internal forwarding patterns."""
+        # Split on standard patterns AND Enron-internal forwarding headers
+        # e.g., "Sharron Westbrook @ ENRON 08/18/2000 04:22 PM"
+        # e.g., "From: Name/ENRON@enronXgate on MM/DD/YYYY HH:MM AM"
         text = re.split(
-            r'-----Original Message-----|On .* wrote:|(?:-{5,}\s*Forwarded by)',
+            r'-----Original Message-----'
+            r'|On [^\n]+ wrote:'
+            r'|(?:-{5,}\s*Forwarded by)'
+            r'|\S+\s*@\s*ENRON\s+\d{2}/\d{2}/\d{4}'
+            r'|From:\s+[a-zA-Z0-9.\s-]+/ENRON'
+            r'|From:\s+[a-zA-Z0-9.\s-]+@enron',
             text,
+            flags=re.IGNORECASE,
         )[0]
         text = re.sub(r'>.*', '', text, flags=re.MULTILINE)
+        return text
+
+    # ── Email Metadata Removal ────────────────────────────────────────────────
+    def remove_email_metadata(self, text: str) -> str:
+        """Remove residual email header lines and Enron routing paths."""
+        # Remove lines starting with From:, To:, cc:, Subject:, Sent:, Date:
+        text = re.sub(
+            r'^\s*(From|To|cc|bcc|Subject|Sent|Date):\s*.*$',
+            '', text, flags=re.MULTILINE | re.IGNORECASE,
+        )
+        # Remove Enron-style routing paths (e.g., /HOU/ECT@ECT, /Corp/Enron@ENRON)
+        text = re.sub(r'/[a-zA-Z0-9]+/[a-zA-Z0-9]+@[a-zA-Z0-9]+', '', text)
+        # Remove standalone email addresses
+        text = re.sub(r'\b[\w.+-]+@[\w.-]+\.\w+\b', '', text)
+        # Remove timestamp patterns (MM/DD/YYYY HH:MM AM/PM)
+        text = re.sub(
+            r'\d{1,2}/\d{1,2}/\d{4}\s+\d{1,2}:\d{2}\s*(?:AM|PM)?',
+            '', text, flags=re.IGNORECASE,
+        )
         return text
 
     # ── Signature Removal ─────────────────────────────────────────────────────
@@ -69,6 +98,7 @@ class Cleaner:
         if not isinstance(text, str):
             return ""
         text = self.remove_replies(text)
+        text = self.remove_email_metadata(text)
         text = self.remove_signature(text)
         text = self.remove_urls(text)
         text = re.sub(r'\s+', ' ', text).strip()

@@ -96,6 +96,14 @@ class DataLoader:
             self.df["clean_body_classify"].str.strip() != ""
         ].reset_index(drop=True)
         print(f"[DataLoader] Dropped {before - len(self.df)} unusable rows.")
+
+        # Deduplicate emails with identical cleaned body text
+        before_dup = len(self.df)
+        self.df = self.df.drop_duplicates(
+            subset=["clean_body_classify"]
+        ).reset_index(drop=True)
+        print(f"[DataLoader] Dropped {before_dup - len(self.df)} duplicate emails.")
+
         return self
 
     # ── Save ──────────────────────────────────────────────────────────────────

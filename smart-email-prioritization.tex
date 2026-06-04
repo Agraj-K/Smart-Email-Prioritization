@@ -1,0 +1,648 @@
+% Template for Elsevier CRC journal article
+% version 1.2 dated 09 May 2011
+
+% This file (c) 2009-2011 Elsevier Ltd.  Modifications may be freely made,
+% provided the edited file is saved under a different name
+
+% This file contains modifications for Procedia Computer Science
+
+% Changes since version 1.1
+% - added "procedia" option compliant with ecrc.sty version 1.2a
+%   (makes the layout approximately the same as the Word CRC template)
+% - added example for generating copyright line in abstract
+
+%-----------------------------------------------------------------------------------
+
+%% This template uses the elsarticle.cls document class and the extension package ecrc.sty
+%% For full documentation on usage of elsarticle.cls, consult the documentation "elsdoc.pdf"
+%% Further resources available at http://www.elsevier.com/latex
+
+%-----------------------------------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                          %%
+%% Important note on usage                                  %%
+%% -----------------------                                  %%
+%% This file should normally be compiled with PDFLaTeX      %%
+%% Using standard LaTeX should work but may produce clashes %%
+%%                                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% The '3p' and 'times' class options of elsarticle are used for Elsevier CRC
+%% The 'procedia' option causes ecrc to approximate to the Word template
+\documentclass[3p,times,procedia]{elsarticle}
+\flushbottom
+
+%% The `ecrc' package must be called to make the CRC functionality available
+\usepackage{ecrc}
+\usepackage[bookmarks=false]{hyperref}
+    \hypersetup{colorlinks,
+      linkcolor=blue,
+      citecolor=blue,
+      urlcolor=blue}
+\usepackage{amsmath}
+
+
+%% The ecrc package defines commands needed for running heads and logos.
+%% For running heads, you can set the journal name, the volume, the starting page and the authors
+
+%% set the volume if you know. Otherwise `00'
+\volume{00}
+
+%% set the starting page if not 1
+\firstpage{1}
+
+%% Give the name of the journal
+\journalname{Procedia Computer Science}
+
+%% Give the author list to appear in the running head
+%% Example \runauth{C.V. Radhakrishnan et al.}
+\runauth{Agraj K. et al.}
+
+%% The choice of journal logo is determined by the \jid and \jnltitlelogo commands.
+%% A user-supplied logo with the name <\jid>logo.pdf will be inserted if present.
+%% e.g. if \jid{yspmi} the system will look for a file yspmilogo.pdf
+%% Otherwise the content of \jnltitlelogo will be set between horizontal lines as a default logo
+
+%% Give the abbreviation of the Journal.
+\jid{procs}
+
+%% Give a short journal name for the dummy logo (if needed)
+\jnltitlelogo{Computer Science}
+
+%% Provide the copyright line to appear in the abstract
+\CopyrightLine{2026}{Published by Elsevier B.V.}
+
+%% Hereafter the template follows `elsarticle'.
+%% For more details see the existing template files elsarticle-template-harv.tex and elsarticle-template-num.tex.
+
+%% Elsevier CRC generally uses a numbered reference style
+%% For this, the conventions of elsarticle-template-num.tex should be followed (included below)
+%% If using BibTeX, use the style file elsarticle-num.bst
+
+%% End of ecrc-specific commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% The amssymb package provides various useful mathematical symbols
+
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+%% \usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{authoryear}
+
+% \biboptions{}
+
+% if you have landscape tables
+\usepackage[figuresright]{rotating}
+%\usepackage{harvard}
+% put your own definitions here:x
+%   \newcommand{\cZ}{\cal{Z}}
+%   \newtheorem{def}{Definition}[section]
+%   ...
+
+% add words to TeX's hyphenation exception list
+%\hyphenation{author another created financial paper re-commend-ed Post-Script}
+
+% declarations for front matter
+
+
+\begin{document}
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+\dochead{International Conference on Machine Learning and Data Engineering}%%%
+%% Use \dochead if there is an article header, e.g. \dochead{Short communication}
+%% \dochead can also be used to include a conference title, if directed by the editors
+%% e.g. \dochead{17th International Conference on Dynamical Processes in Excited States of Solids}
+
+\title{ Enhancing Email Productivity Through
+NLP-Driven Prioritization and Summarization.}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+
+
+\author[a]{Agraj K (AM.SC.U4AIE23105)} 
+\author[a]{Jaydeep Dileep (AM.SC.U4AIE23114)}
+\author[a]{Sravan Sudeep (AM.SC.U4AIE23153)}
+
+\address[a]{Department of Computer Science and Engineering (Artificial Intelligence), Amrita Vishwa Vidyapeetham, Amritapuri, India}
+
+\begin{abstract}
+The exponential growth of workplace email communication has made manual 
+inbox management increasingly inefficient, with professionals spending 
+significant time triaging messages that vary widely in urgency and 
+relevance. This paper presents a three-phase Natural Language Processing 
+(NLP)-driven pipeline for intelligent email prioritization. In the first 
+phase, a Bidirectional Encoder Representations from Transformers 
+(BERT)-based model --- specifically DistilBERT --- is fine-tuned on the 
+Enron email dataset, a corpus of over 500,000 real corporate emails, 
+using a rule-based label generator that assigns priority levels (High, 
+Medium, Low) based on urgency keywords, action-request phrases, 
+sentiment polarity, sender reputation, subject-line urgency, and thread 
+depth. In the second phase, a Retrieval-Augmented Generation (RAG) index 
+is constructed using the all-MiniLM-L6-v2 sentence transformer model 
+with Facebook AI Similarity Search (FAISS)-based approximate nearest 
+neighbour search, enabling semantic retrieval of historically similar 
+emails at inference time. In the third phase, a Fine-tuned Language Net 
+(Flan-T5) generative model employs Chain-of-Thought (CoT) 
+prompting~\cite{wei2022} to perform step-by-step reasoning---analysing 
+urgency, action requirements, sender context, historical patterns, and 
+model agreement---before combining the classifier's prediction with 
+retrieved historical context to produce a final priority label, 
+confidence score, and natural language explanation. The system is 
+evaluated using standard classification metrics including accuracy, 
+precision, recall, and F1 score, and is demonstrated through an 
+interactive Streamlit web interface. Experimental results demonstrate 
+the effectiveness of combining supervised fine-tuning with RAG-based 
+contextual reasoning and CoT-driven inference for automated email 
+prioritization.
+\end{abstract}
+
+\begin{keyword}
+Natural Language Processing (NLP) \sep 
+Email prioritization \sep 
+DistilBERT \sep 
+Retrieval-Augmented Generation (RAG) \sep
+Facebook AI Similarity Search (FAISS) \sep
+Fine-tuned Language Net (Flan-T5) \sep
+Sentiment analysis \sep
+Transformer models \sep
+Text classification \sep
+Enron email dataset
+\end{keyword}
+\end{frontmatter}
+
+%\correspondingauthor[*]{Corresponding author. Tel.: +0-000-000-0000 ; fax: +0-000-000-0000.}
+
+%%
+%% Start line numbering here if you want
+%%
+% \linenumbers
+\vspace*{-6pt}
+%% main text
+
+\section{Introduction}
+\label{sec:intro}
+
+The rapid proliferation of electronic mail in professional environments has created a significant productivity challenge. Knowledge workers receive an average of over 120 emails per day~\cite{radicati2023}, and manually triaging this volume to identify urgent or actionable messages is both time-consuming and error-prone. The inability to surface high-priority emails promptly can lead to missed deadlines, delayed responses, and workflow disruptions.
+
+Traditional rule-based email filters, such as those offered by Microsoft Outlook and Google Gmail, rely on static keyword matching or sender whitelists. While useful, these approaches fail to capture the semantic nuance of natural language---an email requesting an ``urgent project review by end of day'' may not contain any pre-configured filter keywords, yet clearly demands immediate attention.
+
+Recent advances in Natural Language Processing (NLP), particularly transformer-based language models~\cite{vaswani2017}, have demonstrated remarkable performance on text classification tasks. Models such as BERT~\cite{devlin2019} and its distilled variants~\cite{sanh2019} can capture deep contextual relationships within text. Concurrently, the Retrieval-Augmented Generation (RAG) paradigm~\cite{lewis2020} has shown that grounding language model predictions in retrieved evidence significantly improves accuracy and interpretability.
+
+This paper presents a three-phase NLP pipeline for intelligent email prioritization that combines these techniques:
+
+\begin{itemize}
+\item \textbf{Phase~1 (Model Fine-Tuning):} A DistilBERT~\cite{sanh2019} classifier is fine-tuned on the Enron email corpus~\cite{klimt2004} using weak supervision labels derived from six contextual features---urgency keywords, action-request phrases, sentiment polarity, sender reputation, thread depth, and subject-line urgency---with class-weighted cross-entropy loss to address the natural class imbalance.
+\item \textbf{Phase~2 (RAG Pipeline):} Historical emails are embedded using the all-MiniLM-L6-v2 sentence transformer~\cite{reimers2019} and indexed in a FAISS~\cite{johnson2019} vector store for efficient semantic similarity search.
+\item \textbf{Phase~3 (Contextual Inference):} A Flan-T5~\cite{chung2022} generative model employs Chain-of-Thought (CoT) prompting~\cite{wei2022} to combine the classifier's prediction with RAG-retrieved context through step-by-step reasoning, producing a final priority label, confidence score, and natural language explanation.
+\end{itemize}
+
+The system is demonstrated through an interactive Streamlit web interface and evaluated using standard classification metrics. The remainder of this paper is organised as follows: Section~2 reviews related work; Section~3 details the proposed methodology; Section~4 describes the experimental setup; Section~5 presents results and discussion; and Section~6 concludes with directions for future work.
+
+
+\section{Related work}
+\label{sec:related}
+
+\subsection{Transformer-based text classification}
+
+The introduction of the Transformer architecture by Vaswani et al.~\cite{vaswani2017} marked a paradigm shift in NLP. BERT~\cite{devlin2019}, a bidirectional encoder trained with masked language modelling, achieved state-of-the-art results across numerous benchmarks. Sanh et al.~\cite{sanh2019} proposed DistilBERT, a knowledge-distilled variant that retains 97\% of BERT's performance while being 60\% faster and 40\% smaller, making it well-suited for downstream classification tasks with limited computational resources.
+
+\subsection{Email prioritization and triage}
+
+Prior work on email prioritization includes the SmartPriority system by Aberdeen et al.~\cite{aberdeen2010}, which used logistic regression over hand-crafted features. More recent approaches leverage deep learning: Yang et al.~\cite{yang2017} applied hierarchical attention networks for document classification, while Cer et al.~\cite{cer2018} demonstrated the effectiveness of universal sentence encoders for semantic similarity tasks relevant to email matching.
+
+\subsection{Retrieval-Augmented Generation}
+
+Lewis et al.~\cite{lewis2020} introduced RAG, which conditions a generative model on documents retrieved from a knowledge base at inference time. This approach reduces hallucination and improves factual grounding. FAISS~\cite{johnson2019}, developed by Facebook AI Research, enables efficient approximate nearest neighbour search over dense vector spaces, making it practical to retrieve from large-scale corpora in real time.
+
+\subsection{Instruction-tuned generative models}
+
+Chung et al.~\cite{chung2022} proposed Flan-T5, an instruction-tuned variant of the T5 encoder-decoder model. Flan-T5 excels at zero-shot and few-shot tasks when provided with structured prompts, making it an effective reasoning engine for combining classifier outputs with retrieved evidence.
+
+\subsection{Research gap and contributions}
+
+Existing approaches to email prioritization exhibit several limitations. Most systems rely on \textbf{single-task pipelines} that perform classification in isolation, without leveraging retrieved historical evidence to contextualise predictions. Prior work is predominantly \textbf{text-centric}, treating the email body as the sole input feature while ignoring rich meta-signals such as sender importance, thread dynamics, and subject-line urgency cues. Furthermore, there is \textbf{no established ground truth} for email priority labels---the Enron corpus and similar datasets lack human-annotated priority annotations, yet few studies address how to generate reliable training labels in the absence of supervision. Finally, existing classifiers rarely account for the \textbf{severe class imbalance} inherent in real-world email corpora, where the vast majority of messages are low priority.
+
+This work addresses these gaps through the following contributions:
+
+\begin{enumerate}
+\item \textbf{Three-phase architecture:} A novel pipeline that chains supervised classification (DistilBERT), semantic retrieval (FAISS-based RAG), and generative reasoning (Flan-T5) into a unified inference flow---moving beyond single-task email classifiers.
+\item \textbf{Multi-signal weak supervision:} A composite rule-based labelling scheme that fuses six heterogeneous features---urgency keywords, action-request phrases, sentiment polarity, sender reputation, capped thread depth, and subject-line urgency---to generate training labels without human annotation.
+\item \textbf{Dual-pipeline preprocessing:} Two parallel cleaning pipelines optimised for different downstream tasks: minimal cleaning for RAG embeddings (preserving semantic structure) and aggressive normalisation for the DistilBERT classifier.
+\item \textbf{Class-weighted training:} Inverse-frequency class weights applied to the cross-entropy loss function, ensuring that the classifier learns robust representations for minority classes (High and Medium priority) despite a 10:1 natural imbalance.
+\item \textbf{Chain-of-Thought prompting:} A structured five-step CoT prompt~\cite{wei2022} that elicits explicit reasoning from the generative model---analysing urgency, action requirements, sender context, historical patterns, and model agreement---before committing to a final classification.
+\item \textbf{Programmatic CoT fallback:} A deterministic reasoning module that constructs structured explanations when the generative model fails to produce parseable step-by-step output, ensuring consistent interpretability.
+\end{enumerate}
+
+
+\section{Proposed methodology}
+\label{sec:method}
+
+\subsection{System overview}
+
+The proposed system consists of three sequential phases, as illustrated in Fig.~\ref{fig:pipeline}. Phase~1 produces a fine-tuned DistilBERT classifier. Phase~2 constructs a FAISS-based retrieval index over historical emails. Phase~3 merges the classifier output with retrieved context through a Flan-T5 generative model to yield a final priority label with a confidence score and natural language explanation.
+
+\begin{figure}[t]\vspace*{4pt}
+\centerline{\includegraphics[width=\textwidth]{pipeline_diagram}}
+\caption{Three-phase architecture for NLP-driven email prioritization: (1)~Model Fine-Tuning, (2)~Retrieval-Augmented Generation pipeline, and (3)~Contextual Inference.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Phase 1: Model fine-tuning}
+\label{sec:phase1}
+
+\subsubsection{Dataset and preprocessing}
+
+The Enron email corpus~\cite{klimt2004}, comprising approximately 500,000 real corporate emails from 150 employees, serves as the training dataset. A sample of 55,000 emails is used to balance training quality against computational cost. Each email is stored in RFC-822 format; the Python \texttt{email.message\_from\_string()} parser extracts structured fields (\texttt{From}, \texttt{To}, \texttt{Subject}, \texttt{Date}, \texttt{Body}), with MIME multipart handling to extract \texttt{text/plain} content from complex message structures.
+
+A dual-pipeline cleaning strategy is applied to produce two versions of each email body optimised for different downstream tasks:
+
+\begin{itemize}
+\item \textbf{Summarisation cleaning} (\texttt{clean\_body\_summary}): Minimal cleaning that preserves natural language structure for use in RAG embeddings. Quoted reply blocks (identified by patterns such as \texttt{-----Original Message-----}, \texttt{On ... wrote:}, and \texttt{> } line prefixes), forwarded-message headers, trailing signature blocks (detected via markers such as \textit{regards}, \textit{thanks}, \textit{sent from my}), and URLs are removed. Whitespace is normalised.
+\item \textbf{Classification cleaning} (\texttt{clean\_body\_classify}): Aggressive normalisation for the DistilBERT classifier. In addition to the above, text is lowercased and all non-alphanumeric characters are stripped. This aligns with the \texttt{distilbert-base-uncased} tokeniser's expectations and reduces vocabulary noise.
+\end{itemize}
+
+A usability filter discards emails with fewer than five words after cleaning, as well as boilerplate system messages (e.g., unsubscribe notices, automated link confirmations) identified via regular expression matching. This dual-pipeline design ensures that RAG embeddings retain semantic nuance (casing, punctuation) while the classifier receives maximally normalised input.
+
+\subsubsection{Rule-based label generation}
+
+Since the Enron corpus lacks ground-truth priority annotations, a composite rule-based labelling scheme is employed---a form of \textit{weak supervision} (also known as programmatic labelling)~\cite{ratner2017}. For each email, six sub-scores are computed:
+
+\begin{enumerate}
+\item \textbf{Urgency score ($S_u$):} Word-boundary regex matches against a curated lexicon of 13 urgency keywords (e.g., \textit{urgent}, \textit{asap}, \textit{deadline}, \textit{critical}, \textit{immediately}, \textit{time-sensitive}, \textit{eod}, \textit{today}, \textit{tomorrow}).
+\item \textbf{Action-request score ($S_a$):} Substring matches for 12 action-request phrases (e.g., \textit{please review}, \textit{action required}, \textit{can you}, \textit{need you}, \textit{approve}, \textit{schedule}, \textit{follow up}).
+\item \textbf{Sentiment score ($S_s$):} The VADER~\cite{hutto2014} sentiment analyser produces a compound score in $[-1, 1]$; strongly negative sentiment (compound $< -0.3$) correlates with escalation and urgency.
+\item \textbf{Sender reputation score ($S_r$):} A heuristic scoring function assigns weights based on sender role indicators: executive titles (CEO, president) receive a score of 4, management titles (manager, director) and institutional domains (.edu, .gov) receive 3, automated senders (noreply) receive 0, and all others default to 2.
+\item \textbf{Thread depth score ($S_t$):} The depth of the email thread is computed by counting the occurrences of reply (\texttt{Re:}) and forward (\texttt{Fwd:}) prefixes in the subject line, capped at $+2$ (i.e., $S_t = \min(2, \text{count})$) to prevent long, casual conversations from dominating the priority score.
+\item \textbf{Subject-line urgency score ($S_{su}$):} A dedicated scan of the subject line for urgency keywords, weighted at $\times 2$ per match, as subject lines are more intentional signals of priority than body text.
+\end{enumerate}
+
+The six sub-scores are combined into a weighted composite score:
+
+\begin{equation}
+S_{\text{composite}} = 2 S_u + 2 S_a + S_{su} + S_t + \max(0,\, S_r - 2) + \mathbb{1}[S_s < -0.3]
+\label{eq:composite}
+\end{equation}
+
+\noindent where the sender score contributes only when it exceeds the corpus average of 2 (since most Enron senders share the \texttt{@enron.com} domain), and the sentiment indicator $\mathbb{1}[\cdot]$ adds a binary bonus for strongly negative emails. The composite score is then mapped to three priority classes:
+
+\begin{equation}
+\text{Priority} = 
+\begin{cases}
+\text{High}   & \text{if } S_{\text{composite}} \geq 5 \\
+\text{Medium}  & \text{if } 3 \leq S_{\text{composite}} < 5 \\
+\text{Low}     & \text{otherwise}
+\end{cases}
+\label{eq:labeling}
+\end{equation}
+
+This weak supervision approach is justified by the observation that the downstream neural model transcends the limitations of the rule-based teacher: DistilBERT learns contextual semantic patterns (e.g., understanding negation in ``this is NOT urgent'') that simple keyword matching cannot capture.
+
+The resulting label distribution exhibits a pronounced class imbalance characteristic of real-world email corpora: approximately 76.7\% Low, 15.3\% Medium, and 7.9\% High. To prevent the classifier from converging to a trivial majority-class predictor, a \textbf{class-weighted cross-entropy loss} is employed during training. Inverse-frequency weights are computed as:
+
+\begin{equation}
+w_c = \frac{N_{\text{total}}}{C \times N_c}
+\label{eq:classweights}
+\end{equation}
+
+\noindent where $N_{\text{total}}$ is the total number of training samples, $C = 3$ is the number of classes, and $N_c$ is the count of class~$c$. This yields weights of approximately $w_{\text{Low}} = 0.43$, $w_{\text{Medium}} = 2.18$, and $w_{\text{High}} = 4.19$, ensuring that the aggregate loss contribution from each class is equalised. The weighted loss penalises misclassifications of minority classes (High and Medium) proportionally more, improving recall on critical emails without introducing label noise.
+
+\subsubsection{DistilBERT fine-tuning}
+
+The pre-trained \texttt{distilbert-base-uncased} model (66M parameters, 6 transformer layers, 12 attention heads, 768-dimensional hidden states) is loaded via the Hugging Face \texttt{DistilBertForSequenceClassification} class with a linear classification head mapping the \texttt{[CLS]} token representation to three output classes. The \texttt{[CLS]} token serves as a sentence-level aggregation of the input, trained during BERT's original pre-training via the Next Sentence Prediction (NSP) objective.
+
+Tokenisation is performed using the DistilBERT WordPiece tokeniser with a maximum sequence length of 256 tokens. Inputs shorter than this are padded with \texttt{[PAD]} tokens; an attention mask ensures the self-attention mechanism ignores padded positions. Training proceeds with the configuration in Table~\ref{tab:hyperparams}.
+
+\begin{table}[h]
+\caption{Fine-tuning hyperparameters for DistilBERT.}
+\label{tab:hyperparams}
+\begin{tabular*}{\hsize}{@{\extracolsep{\fill}}ll@{}}
+\toprule
+Hyperparameter & Value \\
+\colrule
+Optimiser & AdamW~\cite{loshchilov2019} \\
+Learning rate & $2 \times 10^{-5}$ \\
+Weight decay & 0.01 \\
+Max sequence length & 256 tokens \\
+Batch size (train / eval) & 16 / 32 \\
+Epochs & 4 \\
+Warmup ratio & 0.1 \\
+Gradient clipping & max norm 1.0 \\
+Train / validation split & 80\% / 20\% \\
+Early stopping patience & 2 epochs \\
+Loss function & Class-weighted cross-entropy (Eq.~\ref{eq:classweights}) \\
+Random seed & 42 \\
+\botrule
+\end{tabular*}
+\end{table}
+
+The AdamW optimiser~\cite{loshchilov2019} is used with decoupled weight decay, which corrects the interaction between L2 regularisation and adaptive learning rates present in standard Adam. A linear learning rate schedule with warmup is employed: the learning rate increases linearly from zero during the warmup phase (first 10\% of total training steps), then decays linearly to zero. Gradient norms are clipped at 1.0 to prevent exploding gradients in the transformer's deep computation graph. The loss function is class-weighted cross-entropy (Equation~\ref{eq:classweights}), where the per-class weights are computed from the training label distribution to counteract the natural class imbalance. Early stopping monitors validation loss with a patience of 2 epochs, saving the best-performing checkpoint to prevent overfitting.
+
+\subsection{Phase 2: Retrieval-Augmented Generation pipeline}
+\label{sec:phase2}
+
+Phase~2 constructs a semantic retrieval system that provides the generative model (Phase~3) with historical evidence at inference time. This follows the Retrieval-Augmented Generation (RAG) paradigm~\cite{lewis2020}: rather than relying solely on the classifier's learned parameters, the system retrieves concrete examples of previously prioritised emails to ground its reasoning.
+
+\subsubsection{Embedding generation}
+
+Historical emails are embedded using the \texttt{all-MiniLM-L6-v2} sentence transformer model~\cite{reimers2019}, a 6-layer MiniLM variant distilled from BERT and trained with a Siamese network objective on over one billion sentence pairs. The model produces 384-dimensional dense vectors optimised for semantic similarity.
+
+For each email, the model processes WordPiece-tokenised input through six transformer layers with self-attention, yielding per-token hidden states. A \textbf{mean pooling} strategy aggregates these token-level representations into a single sentence embedding by computing the attention-mask-weighted average of all token vectors. Mean pooling is preferred over using the \texttt{[CLS]} token because the \texttt{[CLS]} representation was pre-trained for Next Sentence Prediction (NSP), not sentence-level similarity---Reimers and Gurevych~\cite{reimers2019} demonstrated that mean pooling consistently outperforms \texttt{[CLS]} pooling for semantic similarity tasks.
+
+The resulting vectors are \textbf{L2-normalised} to unit length ($\hat{v} = v / \|v\|_2$), which transforms inner-product computation into cosine similarity. This is critical because FAISS \texttt{IndexFlatIP} computes dot products; L2-normalisation ensures these dot products measure directional similarity (semantic closeness) rather than vector magnitude (text length).
+
+\textbf{Chunking strategy.} Emails exceeding the model's 256-token input limit are split into overlapping chunks of 200 words with 25\% overlap (50 words). Each chunk is embedded independently, and the per-chunk embeddings are averaged to produce a single 384-dimensional vector per email. The overlap ensures that contextual information near chunk boundaries is captured by at least two chunks, preventing information loss at split points.
+
+\subsubsection{FAISS vector indexing}
+
+The L2-normalised embeddings are stored in a FAISS~\cite{johnson2019} \texttt{IndexFlatIP} (Inner Product) index, which performs exact nearest-neighbour search by computing the dot product between the query vector and every stored vector. For the corpus size of $\sim$45,000 vectors at 384 dimensions, exact search executes in approximately 2--5~ms per query---well within real-time requirements. Approximate indices (e.g., IVF, HNSW) trade accuracy for speed and are necessary only at scales exceeding millions of vectors; at our scale, exact search guarantees 100\% recall (the true nearest neighbours are always found).
+
+Associated metadata---including the email subject, body snippet, priority label, and sender---is persisted alongside the index in a serialised format. This allows the system to return interpretable results (not just vector indices) during retrieval.
+
+\subsubsection{Semantic retrieval}
+
+At inference time, an incoming email is embedded using the same sentence transformer and mean-pooling procedure. The FAISS index returns the top-$K$ most semantically similar historical emails (default $K = 3$) along with their cosine similarity scores and associated metadata. The value $K = 3$ is chosen to balance three concerns: (i)~providing sufficient evidence for the LLM to detect consistent priority patterns, (ii)~keeping the prompt within Flan-T5's input limit of 768 tokens, and (iii)~avoiding noise from low-similarity results that could mislead the generative model.
+
+\subsection{Phase 3: Contextual inference with Chain-of-Thought prompting}
+\label{sec:phase3}
+
+The final phase serves as the decision-making component of the pipeline, synthesising signals from the supervised classifier (Phase~1) and the semantic retrieval system (Phase~2) through a generative language model.
+
+\subsubsection{Model architecture}
+
+The generative model is \texttt{google/flan-t5-base}~\cite{chung2022}, a 250M-parameter encoder-decoder transformer. Unlike decoder-only architectures (e.g., GPT), the encoder-decoder design processes the input prompt through a dedicated encoder and generates the output through a separate decoder---a structure well-suited for conditional generation tasks where the input and output serve distinct roles. Flan-T5 is instruction-tuned on over 1,800 tasks, enabling it to follow structured prompts with high fidelity.
+
+\subsubsection{Input composition}
+
+The prompt assembles three sources of information:
+
+\begin{enumerate}
+\item The incoming email text.
+\item The DistilBERT classifier's predicted priority label and full softmax probability distribution across all three classes (e.g., Low: 4.2\%, Medium: 8.5\%, High: 87.3\%).
+\item The top-$K$ RAG-retrieved historical emails with their priority labels, cosine similarity scores, subject lines, and body snippets.
+\end{enumerate}
+
+\subsubsection{Chain-of-Thought prompting}
+
+The prompt employs \textbf{Chain-of-Thought (CoT) prompting}~\cite{wei2022}, a technique that elicits step-by-step reasoning from the language model before it commits to a final classification. Rather than requesting a single-shot answer, the prompt decomposes the classification task into five sequential analytical steps:
+
+\begin{enumerate}
+\item \textbf{Urgency analysis:} Identification of time-sensitive language and urgency keywords (e.g., \textit{urgent}, \textit{ASAP}, \textit{deadline}).
+\item \textbf{Action-request detection:} Assessment of whether the email requires a specific response or action (e.g., \textit{please review}, \textit{approve}).
+\item \textbf{Sender context:} Evaluation of sender importance based on role indicators (e.g., executive, manager).
+\item \textbf{Historical pattern matching:} Comparison with the priority labels of RAG-retrieved similar emails, leveraging the consensus of historical precedent.
+\item \textbf{Model agreement:} Evaluation of whether the ML model's prediction aligns with the contextual evidence, explicitly considering the softmax confidence.
+\end{enumerate}
+
+This decomposition forces the model to attend to each signal dimension independently before integrating them into a holistic judgment, reducing the risk of anchoring on a single feature.
+
+\subsubsection{Generation configuration}
+
+Text generation uses \textbf{beam search} with $B = 2$ beams and greedy decoding (\texttt{do\_sample=False}) to produce deterministic, reproducible output. The maximum output length is set to 300 tokens to accommodate the five-step CoT analysis and final structured answer. Beam search with $B = 2$ provides a modest improvement over pure greedy decoding by exploring two candidate sequences simultaneously, selecting the globally highest-probability output.
+
+\subsubsection{Output parsing and fallback mechanism}
+
+The model's free-form text output is parsed using regular expressions to extract three structured fields: the priority label (\texttt{Priority: High/Medium/Low}), confidence score (\texttt{Confidence: 0.0--1.0}), and natural language reasoning. The five CoT steps are also extracted individually using step-specific regex patterns.
+
+A \textbf{programmatic fallback mechanism} ensures that structured reasoning is always available: if the generative model's output cannot be parsed into discrete CoT steps---a known limitation of smaller LLMs---the system constructs equivalent reasoning steps deterministically from the available signals: urgency keyword scanning, action-phrase detection, sender role analysis, RAG similarity aggregation, and model-output comparison. Critically, this fallback only generates the \textit{explanation}; the classification decision itself is never produced by rule-based logic, preserving the integrity of the neural pipeline.
+
+\subsubsection{Override behaviour}
+
+A key design property is that Phase~3 can \textbf{override} the Phase~1 classifier's prediction when contextual evidence warrants it. For example, if DistilBERT predicts ``Medium'' with low confidence (e.g., 52\%) but all three RAG-retrieved emails are labeled ``High'' with high similarity scores, the CoT reasoning process may escalate the final classification to ``High''. Conversely, when the classifier is confident ($>$85\%), the LLM typically concurs. This multi-source arbitration is the primary advantage of the three-phase architecture over a standalone classifier.
+
+After the step-by-step analysis, the system produces:
+
+\begin{itemize}
+\item A \textbf{final priority label} (High / Medium / Low), potentially overriding the classifier based on RAG evidence and CoT reasoning.
+\item A \textbf{confidence score} reflecting the consistency between the classifier, historical context, and reasoning steps.
+\item A \textbf{natural language explanation} articulating the reasoning behind the classification, displayed to the user through the Streamlit interface.
+\end{itemize}
+
+
+\section{Experimental setup}
+\label{sec:experiments}
+
+\subsection{Dataset statistics}
+
+The Enron email corpus, after preprocessing and deduplication, yields the dataset statistics summarised in Table~\ref{tab:dataset}.
+
+\begin{table}[h]
+\caption{Dataset statistics after preprocessing.}
+\label{tab:dataset}
+\begin{tabular*}{\hsize}{@{\extracolsep{\fill}}ll@{}}
+\toprule
+Statistic & Value \\
+\colrule
+Total emails (raw) & $\sim$500,000 \\
+Sampled emails & 55,000 \\
+Emails after cleaning & 45,291 \\
+High priority & 7.9\% (3,601) \\
+Medium priority & 15.3\% (6,933) \\
+Low priority & 76.7\% (34,757) \\
+Train / validation split & 36,232 / 9,059 \\
+\botrule
+\end{tabular*}
+\end{table}
+
+\subsection{Evaluation metrics}
+
+The fine-tuned classifier is evaluated using standard metrics:
+
+\begin{equation}
+\text{Precision} = \frac{TP}{TP + FP}, \quad
+\text{Recall} = \frac{TP}{TP + FN}, \quad
+F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\label{eq:metrics}
+\end{equation}
+
+\noindent Weighted and macro-averaged F1 scores are reported alongside per-class precision and recall. A confusion matrix visualises misclassification patterns across the three priority levels.
+
+\subsection{Implementation details}
+
+The system is implemented in Python 3.10 using PyTorch and the Hugging Face \texttt{transformers} library. FAISS is used for vector indexing. The interactive front-end is built with Streamlit. All experiments are conducted on a machine equipped with an NVIDIA GPU with CUDA support. The complete source code is available at \url{https://github.com/sravansudeep/Smart-Email-Prioritization}.
+
+
+\section{Results and discussion}
+\label{sec:results}
+
+\subsection{Classification performance}
+
+Table~\ref{tab:results} presents the classification results of the fine-tuned DistilBERT model on the held-out validation set.
+
+\begin{table}[h]
+\caption{Classification results on the validation set.}
+\label{tab:results}
+\begin{tabular*}{\hsize}{@{\extracolsep{\fill}}lccc@{}}
+\toprule
+Class & Precision & Recall & F1 Score \\
+\colrule
+High     & \textbf{89.0}\% & \textbf{90.0}\% & \textbf{89.0}\% \\
+Medium   & \textbf{83.0}\% & \textbf{87.0}\% & \textbf{85.0}\% \\
+Low      & \textbf{98.0}\% & \textbf{97.0}\% & \textbf{98.0}\% \\
+\colrule
+Macro Avg & \textbf{90.0}\% & \textbf{92.0}\% & \textbf{91.0}\% \\
+Weighted Avg & \textbf{95.0}\% & \textbf{95.0}\% & \textbf{95.0}\% \\
+\botrule
+\end{tabular*}
+\end{table}
+
+\noindent \textbf{Overall accuracy: 95.0\%}
+
+The model achieves strong performance across all three classes. The \textit{High} priority class benefits from the presence of distinctive urgency keywords and action-request phrases that DistilBERT's attention mechanism captures effectively. The \textit{Medium} class, being inherently more ambiguous, shows slightly lower recall, as some medium-priority emails lack strong lexical signals and are misclassified as \textit{Low}.
+
+\subsection{Effect of RAG-augmented inference}
+
+The integration of RAG-retrieved historical context in Phase~3 provides two key improvements:
+
+\begin{enumerate}
+\item \textbf{Correction of borderline cases:} When the DistilBERT classifier assigns a prediction with low softmax confidence (e.g., $<0.6$), the Flan-T5 model leverages the priority labels of semantically similar historical emails to adjust the final classification.
+\item \textbf{Interpretable reasoning:} The generative model produces explanations such as: \textit{``This email is classified as HIGH priority because it contains an urgent deadline request, and 4 out of 5 similar historical emails were also classified as High priority.''}
+\end{enumerate}
+
+\subsection{Qualitative analysis}
+
+Table~\ref{tab:examples} illustrates representative classification examples from the system.
+
+\begin{table}[h]
+\caption{Example classifications with LLM reasoning.}
+\label{tab:examples}
+\begin{tabular*}{\hsize}{@{\extracolsep{\fill}}p{4cm}ccp{4cm}@{}}
+\toprule
+Email snippet & Classifier & Final & LLM Reasoning \\
+\colrule
+``URGENT: Project deadline moved to tomorrow, need all reports by EOD'' & High & High & Contains urgency keywords and action request; consistent with historical patterns. \\[4pt]
+``Lunch plans for Friday?'' & Low & Low & Social email with no action items; similar historical emails classified Low. \\[4pt]
+``Please review the attached contract when you get a chance'' & Medium & High & Classifier uncertain (0.52); RAG shows similar review requests were High priority. \\
+\botrule
+\end{tabular*}
+\end{table}
+
+The third example demonstrates the RAG pipeline's value: the classifier's moderate confidence is overridden by strong historical evidence, correctly escalating the email's priority.
+
+
+\section{Conclusion and future work}
+\label{sec:conclusion}
+
+This paper presented a three-phase NLP pipeline for automated email prioritization, combining supervised fine-tuning of a DistilBERT classifier, FAISS-based retrieval-augmented generation, and Flan-T5 contextual reasoning. The system addresses the limitations of traditional keyword-based email filters by leveraging deep semantic understanding, historical context, and generative explanation.
+
+The experimental results demonstrate that the proposed architecture effectively classifies emails into High, Medium, and Low priority levels, with the RAG pipeline providing measurable improvements on borderline cases through historical evidence grounding. The natural language explanations generated by Flan-T5 enhance the system's interpretability and user trust.
+
+Several directions for future work are identified:
+
+\begin{itemize}
+\item \textbf{Personalisation:} Incorporating user-specific interaction histories (e.g., response times, read patterns) to learn individualised priority models.
+\item \textbf{Larger generative models:} Evaluating larger instruction-tuned models (e.g., Flan-T5-large, LLaMA-based models) for improved reasoning quality.
+\item \textbf{Multi-label classification:} Extending beyond three priority levels to support finer-grained categories or multi-label tagging (e.g., urgent \textit{and} informational).
+\item \textbf{Real-time deployment:} Integrating the pipeline with email clients via APIs (e.g., Gmail API, Microsoft Graph) for live inbox prioritization.
+\item \textbf{Cross-domain evaluation:} Validating the approach on contemporary email datasets beyond the Enron corpus.
+\end{itemize}
+
+
+\section*{Acknowledgements}
+
+The authors would like to thank the Department of Computer Science and Engineering (Artificial Intelligence), Amrita Vishwa Vidyapeetham, Amritapuri, for providing the computational resources and academic guidance that supported this research.
+
+
+\begin{thebibliography}{00}
+
+\bibitem{vaswani2017}
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A.N., Kaiser, L., and Polosukhin, I. (2017) ``Attention is all you need.'' {\it Advances in Neural Information Processing Systems} {\bf 30}: 5998--6008.
+
+\bibitem{devlin2019}
+Devlin, J., Chang, M.-W., Lee, K., and Toutanova, K. (2019) ``BERT: Pre-training of deep bidirectional transformers for language understanding.'' {\it Proceedings of NAACL-HLT}: 4171--4186.
+
+\bibitem{sanh2019}
+Sanh, V., Debut, L., Chaumond, J., and Wolf, T. (2019) ``DistilBERT, a distilled version of BERT: Smaller, faster, cheaper and lighter.'' {\it arXiv preprint arXiv:1910.01108}.
+
+\bibitem{lewis2020}
+Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., K\"{u}ttler, H., Lewis, M., Yih, W., Rockt\"{a}schel, T., Riedel, S., and Kiela, D. (2020) ``Retrieval-augmented generation for knowledge-intensive NLP tasks.'' {\it Advances in Neural Information Processing Systems} {\bf 33}: 9459--9474.
+
+\bibitem{johnson2019}
+Johnson, J., Douze, M., and J\'{e}gou, H. (2019) ``Billion-scale similarity search with GPUs.'' {\it IEEE Transactions on Big Data} {\bf 7} (3): 535--547.
+
+\bibitem{chung2022}
+Chung, H.W., Hou, L., Longpre, S., Zoph, B., Tay, Y., Fedus, W., Li, Y., Wang, X., Dehghani, M., Brahma, S., et al. (2022) ``Scaling instruction-finetuned language models.'' {\it arXiv preprint arXiv:2210.11416}.
+
+\bibitem{klimt2004}
+Klimt, B. and Yang, Y. (2004) ``The Enron corpus: A new dataset for email classification research.'' {\it Proceedings of the 15th European Conference on Machine Learning (ECML)}: 217--226.
+
+\bibitem{hutto2014}
+Hutto, C.J. and Gilbert, E. (2014) ``VADER: A parsimonious rule-based model for sentiment analysis of social media text.'' {\it Proceedings of the 8th International AAAI Conference on Weblogs and Social Media (ICWSM)}: 216--225.
+
+\bibitem{reimers2019}
+Reimers, N. and Gurevych, I. (2019) ``Sentence-BERT: Sentence embeddings using Siamese BERT-networks.'' {\it Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP)}: 3982--3992.
+
+\bibitem{radicati2023}
+Radicati Group (2023) ``Email Statistics Report, 2023--2027.'' {\it The Radicati Group, Inc.}, Palo Alto, CA.
+
+\bibitem{aberdeen2010}
+Aberdeen, D., Pacovsky, O., and Slater, A. (2010) ``The learning behind Gmail priority inbox.'' {\it Proceedings of the NIPS 2010 Workshop on Learning on Cores, Clusters and Clouds}.
+
+\bibitem{yang2017}
+Yang, Z., Yang, D., Dyer, C., He, X., Smola, A., and Hovy, E. (2016) ``Hierarchical attention networks for document classification.'' {\it Proceedings of NAACL-HLT}: 1480--1489.
+
+\bibitem{cer2018}
+Cer, D., Yang, Y., Kong, S., Hua, N., Limtiaco, N., St.~John, R., Constant, N., Guajardo-Cespedes, M., Yuan, S., Tar, C., et al. (2018) ``Universal sentence encoder.'' {\it arXiv preprint arXiv:1803.11175}.
+
+\bibitem{wei2022}
+Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichter, B., Xia, F., Chi, E., Le, Q., and Zhou, D. (2022) ``Chain-of-thought prompting elicits reasoning in large language models.'' {\it Advances in Neural Information Processing Systems} {\bf 35}: 24824--24837.
+
+\bibitem{loshchilov2019}
+Loshchilov, I. and Hutter, F. (2019) ``Decoupled weight decay regularization.'' {\it Proceedings of the 7th International Conference on Learning Representations (ICLR)}.
+
+\bibitem{ratner2017}
+Ratner, A., Bach, S.H., Ehrenberg, H., Fries, J., Wu, S., and R\'{e}, C. (2017) ``Snorkel: Rapid training data creation with weak supervision.'' {\it Proceedings of the VLDB Endowment} {\bf 11} (3): 269--282.
+
+\end{thebibliography}
+
+\end{document}

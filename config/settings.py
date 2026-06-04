@@ -23,7 +23,7 @@ for _dir in [DATA_DIR, MODEL_DIR, FAISS_DIR]:
 # Dataset
 # ──────────────────────────────────────────────────────────────────────────────
 KAGGLE_DATASET = "wcukierski/enron-email-dataset"
-SAMPLE_SIZE = 55000         # Number of emails to use (None = all)
+SAMPLE_SIZE = 130000         # Number of emails to use (None = all)
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Priority Labels

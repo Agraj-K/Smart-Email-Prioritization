@@ -102,7 +102,8 @@ class LabelGenerator:
         """Map composite score to a priority label."""
         score = 0
         score += row["urgency_score"] * 2
-        score += row["action_score"] * 2
+        # Cap action score contribution so multiple action words alone don't force High
+        score += min(2, row["action_score"] * 2)
         score += row.get("subject_urgency", 0)
         score += row["thread_score"]
         # Sender score contributes less (almost everyone is @enron.com = 2)
@@ -110,7 +111,8 @@ class LabelGenerator:
         if row["sentiment_score"] < -0.3:
             score += 1
 
-        if score >= 5:
+        # Raise threshold for High to require genuine urgency
+        if score >= 6:
             return "High"
         elif score >= 3:
             return "Medium"
