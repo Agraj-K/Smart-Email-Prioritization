@@ -1,18 +1,23 @@
 """
 Prompt templates for the generative LLM (Phase 3).
 
+Uses Chain-of-Thought (CoT) prompting (Wei et al., 2022) to elicit
+step-by-step reasoning from the LLM before it commits to a final
+classification. This makes the decision process transparent and
+interpretable.
+
 Builds a structured prompt that includes:
   1. The new email text
   2. Retrieved historical context from RAG (similar past emails + their priorities)
   3. The fine-tuned classifier's prediction + confidence
-  4. Instructions for the LLM to produce a final classification
+  4. Instructions for step-by-step reasoning followed by a final answer
 """
 
 
 class PromptBuilder:
     """Build prompts for contextual email priority classification."""
 
-    CLASSIFICATION_TEMPLATE = """You are an expert email priority classifier. Your task is to determine the priority level of a new email using context from similar historical emails and a machine learning model's prediction.
+    CLASSIFICATION_TEMPLATE = """You are an expert email priority classifier. Analyze the email step-by-step before deciding.
 
 ## New Email
 {email_text}
@@ -26,19 +31,20 @@ class PromptBuilder:
 - Full Distribution: {model_probabilities}
 
 ## Instructions
-Based on the new email content, the historical context, and the ML model's prediction, determine the final priority classification.
+Think step by step. For each step, write a short analysis.
 
-Consider:
-1. Urgency keywords (urgent, ASAP, deadline, immediately)
-2. Action requests (please review, need approval, schedule meeting)
-3. Sender importance (executives, managers, automated systems)
-4. Similarity to past high-priority emails
-5. The ML model's confidence level
+Step 1 - Urgency: Are there urgency keywords like urgent, ASAP, deadline, immediately, critical? How time-sensitive is this email?
+Step 2 - Action Required: Does the email request a specific action like review, approve, respond, schedule, or submit?
+Step 3 - Sender Context: Does the sender appear to be an executive, manager, or automated system?
+Step 4 - Historical Pattern: Based on the similar past emails above, what priority did similar emails receive?
+Step 5 - Model Agreement: The ML model predicted {model_prediction} with {model_confidence:.1%} confidence. Do you agree or disagree based on the above analysis?
 
-Respond with EXACTLY this format:
+After your analysis, give the final answer in EXACTLY this format:
 Priority: [High/Medium/Low]
 Confidence: [0.0 to 1.0]
-Reasoning: [One sentence explaining why]"""
+Reasoning: [One sentence summary]
+
+Begin your step-by-step analysis:"""
 
     @staticmethod
     def format_rag_context(retrieved_emails: list[dict]) -> str:

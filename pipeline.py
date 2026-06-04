@@ -89,6 +89,22 @@ def cmd_classify(args):
     print(f"  Confidence:  {result['confidence']:.1%}")
     print(f"  Reasoning:   {result['reasoning']}")
     print(f"  Model Pred:  {result['model_prediction']} ({result['model_confidence']:.1%})")
+
+    # Chain-of-Thought Steps
+    cot_steps = result.get("cot_steps", {})
+    if cot_steps:
+        print("\n  Chain-of-Thought Reasoning:")
+        step_names = {
+            "urgency": "Step 1 - Urgency",
+            "action": "Step 2 - Action Required",
+            "sender": "Step 3 - Sender Context",
+            "historical": "Step 4 - Historical Pattern",
+            "model_agreement": "Step 5 - Model Agreement",
+        }
+        for key, name in step_names.items():
+            if key in cot_steps:
+                print(f"    {name}: {cot_steps[key]}")
+
     print("  RAG Context:")
     for i, ctx in enumerate(result["rag_context"], 1):
         print(f"    {i}. [{ctx['priority_label']}] {ctx['subject'][:50]} (sim={ctx['similarity_score']:.3f})")

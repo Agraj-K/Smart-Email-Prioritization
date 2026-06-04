@@ -125,6 +125,29 @@ if classify_btn and email_text.strip():
     # Reasoning
     st.info(f"**LLM Reasoning:** {result['reasoning']}")
 
+    # Chain-of-Thought Reasoning Steps
+    cot_steps = result.get("cot_steps", {})
+    if cot_steps:
+        st.subheader("🧠 Chain-of-Thought Reasoning")
+
+        step_config = {
+            "urgency":         ("⏰", "Step 1 — Urgency Analysis"),
+            "action":          ("✅", "Step 2 — Action Required"),
+            "sender":          ("👤", "Step 3 — Sender Context"),
+            "historical":      ("📚", "Step 4 — Historical Pattern"),
+            "model_agreement": ("🤝", "Step 5 — Model Agreement"),
+        }
+
+        for key, (emoji, title) in step_config.items():
+            if key in cot_steps:
+                st.markdown(
+                    f'<div class="rag-card">'
+                    f'<strong>{emoji} {title}</strong><br/>'
+                    f'{cot_steps[key]}'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+
     # Probability distribution
     st.subheader("📊 Probability Distribution")
     probs = result["model_probabilities"]

@@ -62,5 +62,6 @@ RAG_TOP_K = 3                # Number of similar emails to retrieve
 # Contextual Inference (Phase 3)
 # ──────────────────────────────────────────────────────────────────────────────
 LLM_MODEL_NAME = "google/flan-t5-base"
-LLM_MAX_INPUT_LENGTH = 512
-LLM_MAX_NEW_TOKENS = 128
+LLM_MAX_INPUT_LENGTH = 768          # Increased for CoT prompt
+LLM_MAX_NEW_TOKENS = 300            # Increased for step-by-step output
+
